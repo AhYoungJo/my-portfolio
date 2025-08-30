@@ -3,7 +3,7 @@
 import {GitHubUser} from '@/types/type';
 import PixelTag from '../atoms/PixelTag';
 import PixelAvatar from '../atoms/PixelAvatar';
-import PixelInfoBox from '../atoms/PixelInfoBox';
+// import PixelInfoBox from '../atoms/PixelInfoBox';
 
 interface PixelProfileProps {
   user: GitHubUser;
@@ -12,7 +12,6 @@ interface PixelProfileProps {
 export default function PixelProfile({user}: PixelProfileProps) {
   return (
     <div className='pixel-profile'>
-      {/* 배경 픽셀 패턴 */}
       <div className='absolute inset-0 opacity-5 pixel-grid-pattern'></div>
 
       <div className='absolute top-4 right-4 text-yellow-400 text-2xl'>⭐</div>
@@ -32,39 +31,31 @@ export default function PixelProfile({user}: PixelProfileProps) {
             <h1 className='text-4xl font-black text-gray-800 mb-2 tracking-wide'>
               {user.name || user.login}
             </h1>
-            <p className='text-xl text-gray-600 font-bold'>@{user.login}</p>
+            <p className='text-xl text-gray-600 font-bold'>🚗🚓</p>
           </div>
 
-          {user.bio && (
+          {/* {user.bio && (
             <PixelInfoBox variant='default'>
               <p>{user.bio}</p>
             </PixelInfoBox>
-          )}
+          )} */}
 
           <div className='flex flex-wrap justify-center md:justify-start gap-3'>
-            {user.company && (
-              <PixelTag icon='🏢' text={user.company} colorTheme='pink' />
-            )}
-
-            {user.location && (
-              <PixelTag icon='📍' text={user.location} colorTheme='green' />
-            )}
-
-            {user.blog && (
+            {user && (
               <PixelTag
                 icon='🔗'
-                text={user.blog}
+                text={'velog'}
                 colorTheme='blue'
-                href={
-                  user.blog.startsWith('http')
-                    ? user.blog
-                    : `https://${user.blog}`
-                }
+                href={'https://velog.io/@double29/posts'}
               />
             )}
 
-            {user.email && (
-              <PixelTag icon='📧' text={user.email} colorTheme='purple' />
+            {user && (
+              <PixelTag
+                icon='📧'
+                text={'doubletwosep@gmail.com'}
+                colorTheme='purple'
+              />
             )}
           </div>
         </div>
