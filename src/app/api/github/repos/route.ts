@@ -1,8 +1,13 @@
 import {detectFrameworks, fetchPackageJson} from '@/utils/frameworkDetector';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const githubToken = process.env.GITHUB_TOKEN;
+    const {searchParams} = new URL(request.url);
+
+    const page = parseInt(searchParams.get('page') || '1');
+    const perPage = parseInt(searchParams.get('per_page') || '5');
+    const all = searchParams.get('all') === 'true';
 
     if (!githubToken) {
       return Response.json(
@@ -11,16 +16,16 @@ export async function GET() {
       );
     }
 
-    // 사용자의 저장소 목록 중에서 최신순, public만 가져오기
-    const response = await fetch(
-      'https://api.github.com/user/repos?sort=updated&type=public&per_page=20',
-      {
-        headers: {
-          Authorization: `Bearer ${githubToken}`,
-          Accept: 'application/vnd.github.v3+json',
-        },
+    const apiUrl = all
+      ? 'https://api.github.com/user/repos?sort=updated&type=public&per_page=100'
+      : `https://api.github.com/user/repos?sort=updated&type=public&per_page=${perPage}&page=${page}`;
+
+    const response = await fetch(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${githubToken}`,
+        Accept: 'application/vnd.github.v3+json',
       },
-    );
+    });
 
     if (!response.ok) {
       throw new Error('GitHub API 호출 실패');
@@ -42,7 +47,6 @@ export async function GET() {
           frameworks = topicsResult.frameworks;
           primaryFramework = topicsResult.primaryFramework;
 
-          // 상위 5개 저장소에만 적용해서 API 호출 수 제한
           const isTopRepo = repos.indexOf(repo) < 5;
           if (
             isTopRepo &&
@@ -90,7 +94,17 @@ export async function GET() {
       }),
     );
 
-    return Response.json(reposWithFrameworks);
+    const responseData = {
+      repos: reposWithFrameworks,
+      meta: {
+        page,
+        perPage,
+        totalCount: reposWithFrameworks.length,
+        hasMore: reposWithFrameworks.length === perPage,
+      },
+    };
+
+    return Response.json(responseData);
   } catch (error) {
     console.error('GitHub Repos API 에러:', error);
     return Response.json(

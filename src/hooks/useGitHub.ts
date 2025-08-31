@@ -7,8 +7,18 @@ export function useGitHubUser() {
   });
 }
 
-export function useGitHubRepos() {
-  return useAsyncData(fetchGitHubRepos, {
-    delay: 800,
-  });
+export function useGitHubRepos(options?: {
+  page?: number;
+  perPage?: number;
+  all?: boolean;
+}) {
+  const {page = 1, perPage = 5, all = false} = options || {};
+
+  return useAsyncData(
+    () => fetchGitHubRepos({page, perPage, all}),
+    {
+      delay: 800,
+    },
+    [page, perPage, all], // 의존성 배열 추가
+  );
 }
