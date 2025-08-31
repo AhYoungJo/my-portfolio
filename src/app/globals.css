@@ -1,8 +1,26 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5f5f7;
+  --foreground: #2d3748;
+
+  --glass-primary: rgba(255, 255, 255, 0.15);
+  --glass-secondary: rgba(255, 255, 255, 0.25);
+  --glass-tertiary: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shadow: rgba(0, 0, 0, 0.15);
+  --glass-shadow-strong: rgba(0, 0, 0, 0.25);
+
+  --text-primary: #1d1d1f;
+  --text-secondary: #383855;
+  --text-tertiary: #705391;
+
+  --accent-blue: #007aff;
+  --accent-green: #34c759;
+  --accent-red: #ff3b30;
+  --accent-orange: #ff9500;
+  --accent-purple: #af52de;
+  --accent-pink: #ff2d92;
 }
 
 @theme inline {
@@ -12,15 +30,187 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  min-height: 100vh;
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border: 2px solid #cbd5e0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #a0aec0;
+  border: 2px solid #cbd5e0;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #718096;
+}
+
+::selection {
+  background-color: #fbbf24;
+  color: #1f2937;
+}
+
+button:focus,
+a:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px #fbbf24;
+}
+
+.glass-card {
+  background: var(--glass-primary);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: var(--glass-secondary);
+  backdrop-filter: blur(50px) saturate(200%);
+  -webkit-backdrop-filter: blur(50px) saturate(200%);
+  box-shadow: 0 12px 40px var(--glass-shadow-strong),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.glass-card-secondary {
+  background: var(--glass-secondary);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px var(--glass-shadow);
+  transition: all 0.2s ease-out;
+}
+
+.glass-header {
+  background: var(--glass-primary);
+  backdrop-filter: blur(60px) saturate(200%);
+  -webkit-backdrop-filter: blur(60px) saturate(200%);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 4px 20px var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.glass-ranking {
+  background: var(--glass-primary);
+  backdrop-filter: blur(35px) saturate(160%);
+  -webkit-backdrop-filter: blur(35px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+}
+
+.glass-ranking-item {
+  background: var(--glass-tertiary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 0.5px solid var(--glass-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 4px var(--glass-shadow);
+  transition: all 0.2s ease-out;
+}
+
+.glass-ranking-item:hover {
+  background: var(--glass-secondary);
+  box-shadow: 0 2px 8px var(--glass-shadow-strong);
+  transform: translateY(-0.5px);
+}
+
+/* 애플 스타일 타이포그래피 */
+.glass-text-primary {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.glass-text-secondary {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.glass-text-tertiary {
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.accent-blue {
+  color: var(--accent-blue);
+}
+.accent-green {
+  color: var(--accent-green);
+}
+.accent-red {
+  color: var(--accent-red);
+}
+.accent-orange {
+  color: var(--accent-orange);
+}
+.accent-purple {
+  color: var(--accent-purple);
+}
+.accent-pink {
+  color: var(--accent-pink);
+}
+
+.icon-glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  padding: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease-out;
+}
+
+.icon-glass:hover {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.icon-glass-sm {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
