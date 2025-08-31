@@ -1,3 +1,5 @@
+import {detectFrameworks} from '@/utils/frameworkDetector';
+
 export async function GET() {
   try {
     const githubToken = process.env.GITHUB_TOKEN;
@@ -39,7 +41,6 @@ export async function GET() {
 
     const repos = await reposResponse.json();
 
-    // 언어별 통계 계산
     const languageStats: Record<string, number> = {};
     repos.forEach((repo: {language?: string}) => {
       if (repo.language) {
@@ -47,13 +48,112 @@ export async function GET() {
       }
     });
 
-    // 가장 많이 사용하는 언어 순으로 정렬
     const topLanguages = Object.entries(languageStats)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
       .map(([language, count]) => ({language, count}));
 
-    // 최근 3개월 내 업데이트된 프로젝트
+    const frameworkStats: Record<string, number> = {};
+    repos.forEach(
+      (repo: {topics?: string[]; language?: string; name?: string}) => {
+        const result = detectFrameworks({
+          topics: repo.topics || [],
+          language: repo.language,
+        });
+
+        const repoName = repo.name?.toLowerCase() || '';
+        const additionalFrameworks: string[] = [];
+
+        if (
+          repoName.includes('react') &&
+          (repo.language === 'JavaScript' || repo.language === 'TypeScript')
+        ) {
+          additionalFrameworks.push('React');
+        }
+        if (
+          repoName.includes('next') &&
+          (repo.language === 'JavaScript' || repo.language === 'TypeScript')
+        ) {
+          additionalFrameworks.push('Next.js');
+        }
+        if (
+          repoName.includes('vue') &&
+          (repo.language === 'JavaScript' || repo.language === 'TypeScript')
+        ) {
+          additionalFrameworks.push('Vue.js');
+        }
+        if (repoName.includes('angular') && repo.language === 'TypeScript') {
+          additionalFrameworks.push('Angular');
+        }
+        if (repoName.includes('django') && repo.language === 'Python') {
+          additionalFrameworks.push('Django');
+        }
+        if (repoName.includes('flask') && repo.language === 'Python') {
+          additionalFrameworks.push('Flask');
+        }
+        if (
+          repoName.includes('express') &&
+          (repo.language === 'JavaScript' || repo.language === 'TypeScript')
+        ) {
+          additionalFrameworks.push('Express');
+        }
+
+        if (
+          result.frameworks.length === 0 &&
+          additionalFrameworks.length === 0
+        ) {
+          switch (repo.language) {
+            case 'JavaScript':
+            case 'TypeScript':
+              // JS/TS 프로젝트에는 기본적으로 Node.js 환경 가정
+              additionalFrameworks.push('JS/TS');
+              break;
+            case 'Python':
+              additionalFrameworks.push('Python');
+              break;
+            case 'Java':
+              additionalFrameworks.push('Java');
+              break;
+            case 'PHP':
+              additionalFrameworks.push('PHP');
+              break;
+          }
+        }
+
+        [...result.frameworks, ...additionalFrameworks].forEach(framework => {
+          frameworkStats[framework] = (frameworkStats[framework] || 0) + 1;
+        });
+      },
+    );
+
+    let topFrameworks = Object.entries(frameworkStats)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 5)
+      .map(([framework, count]) => ({framework, count}));
+
+    if (topFrameworks.length === 0) {
+      const languageFrameworkMap: Record<string, string> = {
+        JavaScript: 'JavaScript',
+        TypeScript: 'TypeScript',
+        Python: 'Python',
+        Java: 'Java',
+        PHP: 'PHP',
+        'C#': 'C#',
+        Go: 'Go',
+        Rust: 'Rust',
+        'C++': 'C++',
+        C: 'C',
+      };
+
+      topFrameworks = topLanguages
+        .filter(lang => languageFrameworkMap[lang.language])
+        .map(lang => ({
+          framework: languageFrameworkMap[lang.language],
+          count: lang.count,
+        }))
+        .slice(0, 5);
+    }
+
     const threeMonthsAgo = new Date();
     threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
@@ -72,11 +172,11 @@ export async function GET() {
       blog: user.blog,
       email: user.email,
 
-      // 통계 정보
       totalRepos: user.public_repos,
       followers: user.followers,
       following: user.following,
       topLanguages,
+      topFrameworks,
       recentProjects,
       accountCreated: user.created_at,
     };
