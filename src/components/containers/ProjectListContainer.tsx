@@ -1,16 +1,27 @@
 'use client';
 
 import ProjectListPresentation from '@/components/presentation/ProjectListPresentation';
-import {useGitHubRepos} from '@/hooks/useGitHub';
+import {useProjectPagination} from '@/hooks/useProjectPagination';
 
 export default function ProjectListContainer() {
-  const {data: repos, loading, error} = useGitHubRepos();
+  const {
+    projects,
+    currentPage,
+    hasMore,
+    loading,
+    error,
+    handleLoadMore,
+    totalProjects,
+  } = useProjectPagination();
 
   return (
     <ProjectListPresentation
-      repos={repos || []}
+      repos={projects}
       loading={loading}
       error={error}
+      hasMore={hasMore}
+      onLoadMore={handleLoadMore}
+      currentPage={currentPage}
     />
   );
 }

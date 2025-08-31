@@ -123,3 +123,12 @@ export interface FrameworkRankingProps {
 export interface ProfileProps {
   user: GitHubUser;
 }
+
+export interface ProjectListPresentationProps {
+  repos: GitHubRepo[];
+  loading: boolean;
+  error: string | null;
+  hasMore?: boolean;
+  onLoadMore?: () => void;
+  currentPage?: number;
+}
