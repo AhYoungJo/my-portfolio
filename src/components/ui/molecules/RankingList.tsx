@@ -1,6 +1,6 @@
 'use client';
 
-import {RankingListProps, RankingItem} from '@/types/type';
+import {RankingListProps} from '@/types/type';
 
 const getRankIcon = (rank: number): string => {
   switch (rank) {
