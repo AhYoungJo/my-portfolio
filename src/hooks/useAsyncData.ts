@@ -19,16 +19,13 @@ interface UseAsyncDataReturn<T> {
 export function useAsyncData<T>(
   fetchFunction: () => Promise<T>,
   options: UseAsyncDataOptions<T> = {},
+  dependencies: any[] = [],
 ): UseAsyncDataReturn<T> {
   const {initialData = null, delay = 0, autoFetch = true} = options;
 
   const [data, setData] = useState<T | null>(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // fetchFunction을 useRef로 안정화
-  const fetchFunctionRef = useRef(fetchFunction);
-  fetchFunctionRef.current = fetchFunction;
 
   const executeFetch = useCallback(async () => {
     try {
@@ -39,7 +36,7 @@ export function useAsyncData<T>(
         await new Promise(resolve => setTimeout(resolve, delay));
       }
 
-      const result = await fetchFunctionRef.current();
+      const result = await fetchFunction();
       setData(result);
     } catch (err) {
       const errorMessage =
@@ -49,7 +46,7 @@ export function useAsyncData<T>(
     } finally {
       setLoading(false);
     }
-  }, [delay]);
+  }, [fetchFunction, delay]);
 
   const refetch = useCallback(async () => {
     await executeFetch();
@@ -59,7 +56,7 @@ export function useAsyncData<T>(
     if (autoFetch) {
       executeFetch();
     }
-  }, [executeFetch, autoFetch]);
+  }, [executeFetch, autoFetch, ...dependencies]);
 
   return {
     data,

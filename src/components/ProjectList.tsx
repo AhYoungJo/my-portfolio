@@ -1,9 +1,7 @@
 'use client';
 
+import ProjectListContainer from '@/components/containers/ProjectListContainer';
+
 export default function ProjectList() {
-  return (
-    <div>
-      <h1>Project List</h1>
-    </div>
-  );
+  return <ProjectListContainer />;
 }
