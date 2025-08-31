@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, useRef} from 'react';
 
 interface UseAsyncDataOptions<T> {
   initialData?: T;
@@ -26,6 +26,10 @@ export function useAsyncData<T>(
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // fetchFunction을 useRef로 안정화
+  const fetchFunctionRef = useRef(fetchFunction);
+  fetchFunctionRef.current = fetchFunction;
+
   const executeFetch = useCallback(async () => {
     try {
       setLoading(true);
@@ -35,7 +39,7 @@ export function useAsyncData<T>(
         await new Promise(resolve => setTimeout(resolve, delay));
       }
 
-      const result = await fetchFunction();
+      const result = await fetchFunctionRef.current();
       setData(result);
     } catch (err) {
       const errorMessage =
@@ -45,7 +49,7 @@ export function useAsyncData<T>(
     } finally {
       setLoading(false);
     }
-  }, [fetchFunction, delay]);
+  }, [delay]);
 
   const refetch = useCallback(async () => {
     await executeFetch();
@@ -66,45 +70,4 @@ export function useAsyncData<T>(
     setError,
     setLoading,
   };
-}
-
-export function useGitHubUser() {
-  return useAsyncData(
-    async () => {
-      const response = await fetch('/api/github/user');
-      if (!response.ok) {
-        throw new Error('GitHub 사용자 정보를 가져올 수 없습니다.');
-      }
-      return response.json();
-    },
-    {delay: 1000}, // 1초 로딩 시뮬레이션
-  );
-}
-
-export function useGitHubRepos() {
-  return useAsyncData(
-    async () => {
-      const response = await fetch('/api/github/repos');
-      if (!response.ok) {
-        throw new Error('프로젝트 목록을 가져올 수 없습니다.');
-      }
-      return response.json();
-    },
-    {delay: 800}, // 0.8초 로딩 시뮬레이션
-  );
-}
-
-export function useCareerData() {
-  return useAsyncData(
-    async () => {
-      const {mockIntroData, mockExperiences} = await import(
-        '@/constants/career'
-      );
-      return {
-        introData: mockIntroData,
-        experiences: mockExperiences,
-      };
-    },
-    {delay: 1500}, // 1.5초 로딩 시뮬레이션
-  );
 }
