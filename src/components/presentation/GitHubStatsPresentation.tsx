@@ -4,7 +4,6 @@ import {GitHubStatsPresentationProps, GitHubUser} from '@/types/type';
 import Card from '@/components/ui/molecules/Card';
 import Profile from '@/components/ui/organisms/Profile';
 import LanguageRanking from '@/components/ui/organisms/LanguageRanking';
-// import FrameworkRanking from '@/components/ui/organisms/FrameworkRanking';
 import LoadingScreen from '@/components/ui/organisms/LoadingScreen';
 import ErrorScreen from '@/components/ui/organisms/ErrorScreen';
 
@@ -48,11 +47,11 @@ export default function GitHubStatsPresentation({
   error,
 }: GitHubStatsPresentationProps) {
   if (loading) {
-    return <LoadingScreen />;
+    return <LoadingScreen type='github-stats' />;
   }
 
   if (error || !user) {
-    return <ErrorScreen error={error || '알 수 없는 오류'} />;
+    return <ErrorScreen error={error || '사용자 정보를 불러올 수 없습니다.'} />;
   }
 
   const accountAge = Math.floor(
@@ -80,7 +79,6 @@ export default function GitHubStatsPresentation({
 
       <div className='space-y-6'>
         <LanguageRanking languages={user.topLanguages} />
-        {/* <FrameworkRanking frameworks={user.topFrameworks} /> */}
       </div>
     </div>
   );

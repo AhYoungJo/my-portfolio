@@ -1,3 +1,4 @@
+import {EXPORT_DETAIL} from 'next/dist/shared/lib/constants';
 import {ReactNode} from 'react';
 
 export interface GitHubUser {
@@ -48,11 +49,6 @@ export interface CardProps {
   children?: ReactNode;
   onClick?: () => void;
   href?: string;
-}
-
-export interface DecorationProps {
-  variant?: 'background' | 'section';
-  opacity?: number;
 }
 
 export interface ErrorScreenProps {
@@ -113,4 +109,14 @@ export interface RankingListProps {
   items: RankingItem[];
   icon: string;
   colorTheme: 'blue' | 'green' | 'purple' | 'yellow' | 'pink' | 'orange';
+}
+
+export interface LoadingScreenProps {
+  type?: 'github-stats' | 'career-section' | 'project-list' | 'general';
+  message?: string;
+  showShimmer?: boolean;
+}
+
+export interface FrameworkRankingProps {
+  frameworks: GitHubUser['topFrameworks'];
 }
