@@ -79,5 +79,10 @@ export default function CareerSection() {
     },
   ];
 
-  return <div className='space-y-8'></div>;
+  return (
+    <div className='space-y-8'>
+      <CareerIntro {...introData} />
+      <CareerTimeline experiences={experiences} />
+    </div>
+  );
 }
