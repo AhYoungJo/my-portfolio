@@ -23,7 +23,7 @@ export default function Card({
           <h3 className='text-sm font-medium glass-text-secondary uppercase tracking-wide mb-2'>
             {title}
           </h3>
-          <p className=' font-bold glass-text-primary leading-tight'>{value}</p>
+          <p className='font-bold glass-text-primary leading-tight'>{value}</p>
         </div>
         <div className='icon-glass ml-1'>
           <span className='text-xl glass-text-primary'>{icon}</span>

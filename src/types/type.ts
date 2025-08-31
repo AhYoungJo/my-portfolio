@@ -1,4 +1,3 @@
-import {EXPORT_DETAIL} from 'next/dist/shared/lib/constants';
 import {ReactNode} from 'react';
 
 export interface GitHubUser {
@@ -7,13 +6,13 @@ export interface GitHubUser {
   avatar_url: string;
   bio?: string;
   blog?: string;
-  totalRepos: number;
-  followers: number;
-  following: number;
+  totalRepos?: number;
+  followers?: number;
+  following?: number;
   topLanguages: {language: string; count: number}[];
   topFrameworks: {framework: string; count: number}[];
-  recentProjects: number;
-  accountCreated: string;
+  recentProjects?: number;
+  accountCreated?: string;
 }
 
 export interface GitHubRepo {
@@ -119,4 +118,8 @@ export interface LoadingScreenProps {
 
 export interface FrameworkRankingProps {
   frameworks: GitHubUser['topFrameworks'];
+}
+
+export interface ProfileProps {
+  user: GitHubUser;
 }

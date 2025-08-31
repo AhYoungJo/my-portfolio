@@ -1,7 +1,7 @@
 'use client';
 
 import CareerSectionPresentation from '@/components/presentation/CareerSectionPresentation';
-import {useCareerData} from '@/hooks/useAsyncData';
+import {useCareerData} from '@/hooks/useCareer';
 
 export default function CareerSectionContainer() {
   const {data, loading, error} = useCareerData();

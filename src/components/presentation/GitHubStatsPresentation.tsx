@@ -9,35 +9,26 @@ import ErrorScreen from '@/components/ui/organisms/ErrorScreen';
 
 const cardList = [
   {
-    title: '총 프로젝트',
-    icon: '📚',
-    getValue: (user: GitHubUser) => `${user.totalRepos}개`,
-  },
-  {
-    title: '팔로워',
-    icon: '👥',
-    getValue: (user: GitHubUser) => `${user.followers}명`,
+    title: 'GitHub',
+    icon: '🔗',
+    getValue: (user: GitHubUser) => `@${user.login}`,
+    getHref: (user: GitHubUser) => `https://github.com/${user.login}`,
   },
   {
     title: '최근 3개월',
     icon: '🔥',
     getValue: (user: GitHubUser) => `${user.recentProjects}개 활동`,
   },
+
+  {
+    title: '팔로워',
+    icon: '👥',
+    getValue: (user: GitHubUser) => `${user.followers}명`,
+  },
   {
     title: '팔로잉',
     icon: '🤝',
     getValue: (user: GitHubUser) => `${user.following}명`,
-  },
-  {
-    title: '계정 연령',
-    icon: '⏰',
-    getValue: (user: GitHubUser, accountAge: number) => `${accountAge}년`,
-  },
-  {
-    title: 'GitHub',
-    icon: '🔗',
-    getValue: (user: GitHubUser) => `@${user.login}`,
-    getHref: (user: GitHubUser) => `https://github.com/${user.login}`,
   },
 ];
 
@@ -54,11 +45,6 @@ export default function GitHubStatsPresentation({
     return <ErrorScreen error={error || '사용자 정보를 불러올 수 없습니다.'} />;
   }
 
-  const accountAge = Math.floor(
-    (new Date().getTime() - new Date(user.accountCreated).getTime()) /
-      (1000 * 60 * 60 * 24 * 365),
-  );
-
   return (
     <div className='space-y-6'>
       <Profile user={user} />
@@ -70,7 +56,7 @@ export default function GitHubStatsPresentation({
               key={card.title}
               title={card.title}
               icon={card.icon}
-              value={card.getValue(user, accountAge)}
+              value={card.getValue(user)}
               {...(href && {href})}
             />
           );
