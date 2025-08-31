@@ -1,11 +1,8 @@
 'use client';
 
-import {PixelInfoBoxProps} from '@/types/type';
+import {InfoBoxProps} from '@/types/type';
 
-export default function PixelInfoBox({
-  children,
-  variant = 'default',
-}: PixelInfoBoxProps) {
+export default function InfoBox({children, variant = 'default'}: InfoBoxProps) {
   const variantClasses = {
     default: 'bg-white border-gray-400 shadow-gray-300 text-gray-700',
     primary: 'bg-blue-50 border-blue-400 shadow-blue-300 text-blue-700',

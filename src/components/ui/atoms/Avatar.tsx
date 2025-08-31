@@ -1,13 +1,13 @@
 'use client';
 
-import {PixelAvatarProps} from '@/types/type';
+import {AvatarProps} from '@/types/type';
 
-export default function PixelAvatar({
+export default function Avatar({
   src,
   alt,
   size = 'large',
   showHighlight = true,
-}: PixelAvatarProps) {
+}: AvatarProps) {
   const sizeClasses = {
     small: 'w-16 h-16',
     medium: 'w-24 h-24',
@@ -20,21 +20,22 @@ export default function PixelAvatar({
       <div
         className={`
         ${sizeClasses[size]} 
-        border-4 border-white 
-        shadow-[6px_6px_0px_0px] shadow-gray-400 
-        rounded-none overflow-hidden
+        glass-card p-1
+        backdrop-filter blur(20px)
+        border border-white/30
+        rounded-2xl overflow-hidden
+        shadow-lg
       `}
       >
         <img
           src={src}
           alt={alt}
-          className='w-full h-full object-cover pixelated'
-          style={{imageRendering: 'pixelated'}}
+          className='w-full h-full object-cover rounded-xl'
         />
       </div>
 
       {showHighlight && (
-        <div className='absolute -top-2 -right-2 w-4 h-4 bg-yellow-300 border-2 border-yellow-500 rounded-none'></div>
+        <div className='absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full shadow-md border border-white/50'></div>
       )}
     </div>
   );
